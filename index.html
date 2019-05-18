@@ -27,23 +27,25 @@
 			
 			/* Javascript code goes here.. */
 
-			var canvas = document.getElementById('gameCanvas');
-			var c = canvas.getContext('2d');
+			// canvas
+				var canvas = document.getElementById('gameCanvas');
+				var c = canvas.getContext('2d');
 
 
 
 
 			// keyboard flags
-			var left = false;
-			var right = false;
+				var left = false;
+				var right = false;
 
 
 			// ball properties
-			var radius = 4;
-			var x = 150;
-			var y = 220;
-			var xSpeed = 3;
-			var ySpeed = 3;
+				var radius = 4;
+				var x = 150;
+				var y = 220;
+				var xSpeed = 3;
+				var ySpeed = 3;
+				var maxSpeed = 6;
 
 			// draw ball function
 			function drawBall() {
@@ -59,11 +61,11 @@
 
 
 			// player properties
-			var width = 80;
-			var height = 10;
-			var player_x = canvas.width/2 - width/2;
-			var player_y = canvas.height - height;
-			var player_xSpeed = 0;
+				var width = 80;
+				var height = 10;
+				var player_x = canvas.width/2 - width/2;
+				var player_y = canvas.height - height;
+				var player_xSpeed = 0;
 
 			// draw player function 
 			function drawPlayer() {
@@ -90,14 +92,14 @@
 
 
 			// bricks properties
-			var bricks = [];
-			var brickRows = 3;
-			var brickCols = 6;
-			var brickWidth = 60;
-			var brickHeight = 15;
-			var brickPadding = 10;
-			var brickOffsetTop = 50
-			var brickOffsetLeft = 35;
+				var bricks = [];
+				var brickRows = 3;
+				var brickCols = 6;
+				var brickWidth = 60;
+				var brickHeight = 15;
+				var brickPadding = 10;
+				var brickOffsetTop = 50
+				var brickOffsetLeft = 35;
 
 			// create bricks objects
 			for (var i = 0; i < brickRows; i++) {
@@ -154,7 +156,6 @@
 				// draw bricks
 				drawBricks();
 
-
 				// move player
 				player_x += player_xSpeed;
 				// listen to keyboard events
@@ -162,19 +163,17 @@
 				else if (right && player_x < canvas.width - width) 	{ player_xSpeed = 7	}
 				else 												{ player_xSpeed = 0 }
 
-
 				// move circle
 				x += xSpeed;
 				y += ySpeed;
 				// bounce on 3 walls
 				if (x >= canvas.width  - radius || x <= radius) { xSpeed *= -1 }
 				if (y <= radius) { ySpeed *= -1 }
+				// game over
 				else if (y >= canvas.height - radius) {
-					// game over
 					drawGameover();
 					clearInterval(loop);
 				}
-
 
 				// detect ball collision with player
 				if (y - radius > player_y - height) {
@@ -189,8 +188,12 @@
 				// detect ball collision with bricks
 				detectCollision();
 
+				// suppress ball's xSpeed
+				if 		(xSpeed > maxSpeed) 	 { xSpeed = maxSpeed }
+				else if (xSpeed < maxSpeed * -1) { xSpeed = maxSpeed * -1 }
 			}
 			var loop = setInterval(draw, 15);
+
 
 			// keydown handler
 			document.addEventListener('keydown', function (e) {
@@ -218,15 +221,6 @@
 						left = false;
 						break;
 				}				
-			});
-			
-
-
-
-			canvas.addEventListener('click', function (e) {
-				c.beginPath();
-				c.arc(e.offsetX, e.offsetY, Math.random() * 25, 0, Math.PI*2);
-				c.stroke();
 			});
 
 
